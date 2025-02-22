@@ -35,3 +35,4 @@ mix ash.gen.domain Helpcenter.KnowledgeBase
 mix ash.gen.resource Helpcenter.KnowledgeBase.Category --extend postgres
 mix ash.gen.resource Helpcenter.KnowledgeBase.Article --extend postgres
 mix ash.gen.resource Helpcenter.KnowledgeBase.Comment --extend postgres
+mix ash.gen.resource Helpcenter.KnowledgeBase.Tag --extend postgres
