@@ -25,12 +25,13 @@ defmodule Helpcenter.KnowledgeBase.Category do
     timestamps()
   end
 
-  # # Relationship Block. In this case this resource has many articles
-  # relationships do
-  #   has_many :articles, Helpcenter.KnowledgeBase.Article do
-  #     description "Relationship with the articles."
-  #     # Tell Ash that the articles table has a column named "category_id" that references this resource
-  #     destination_attribute :category_id
-  #   end
-  #  end
+  # Relationship Block. In this case this resource has many articles
+  relationships do
+    has_many :articles, Helpcenter.KnowledgeBase.Article do
+      description "Relationship with the articles."
+
+      # Tell Ash that the articles table has a column named "category_id" that references this resource
+      destination_attribute :category_id
+    end
+  end
 end

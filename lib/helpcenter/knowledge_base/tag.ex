@@ -16,11 +16,11 @@ defmodule Helpcenter.KnowledgeBase.Tag do
     timestamps()
   end
 
-  # relationships do
-  #   many_to_many :articles, Helpcenter.KnowledgeBase.Article do
-  #     through Helpcenter.KnowledgeBase.ArticleTag
-  #     source_attribute_on_join_resource :tag_id
-  #     destination_attribute_on_join_resource :article_id
-  #   end
-  # end
+  relationships do
+    many_to_many :articles, Helpcenter.KnowledgeBase.Article do
+      through Helpcenter.KnowledgeBase.ArticleTag
+      source_attribute_on_join_resource :tag_id
+      destination_attribute_on_join_resource :article_id
+    end
+  end
 end
