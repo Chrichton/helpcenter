@@ -3,5 +3,6 @@ defmodule Helpcenter.KnowledgeBase do
     otp_app: :helpcenter
 
   resources do
+    resource Helpcenter.KnowledgeBase.Category
   end
 end
