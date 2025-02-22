@@ -7,5 +7,6 @@ defmodule Helpcenter.KnowledgeBase do
     resource Helpcenter.KnowledgeBase.Article
     resource Helpcenter.KnowledgeBase.Comment
     resource Helpcenter.KnowledgeBase.Tag
+    resource Helpcenter.KnowledgeBase.ArticleTag
   end
 end
