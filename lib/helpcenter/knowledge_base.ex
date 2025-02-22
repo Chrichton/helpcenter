@@ -4,5 +4,6 @@ defmodule Helpcenter.KnowledgeBase do
 
   resources do
     resource Helpcenter.KnowledgeBase.Category
+    resource Helpcenter.KnowledgeBase.Article
   end
 end
