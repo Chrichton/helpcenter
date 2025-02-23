@@ -15,6 +15,13 @@ defmodule Helpcenter.KnowledgeBase.Category do
     # end
   end
 
+  actions do
+    # Tell Ash what columns to accept while inserting or updating
+    default_accept [:name, :slug, :description]
+    # Tell Ash what actions are allowed on this resource
+    defaults [:create, :read, :update, :destroy]
+  end
+
   # Tell Ash what columns the resource has and their types and validations
   attributes do
     uuid_primary_key :id
