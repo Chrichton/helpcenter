@@ -38,3 +38,7 @@ mix ash.gen.resource Helpcenter.KnowledgeBase.Comment --extend postgres
 mix ash.gen.resource Helpcenter.KnowledgeBase.Tag --extend postgres
 mix ash.gen.resource Helpcenter.KnowledgeBase.ArticleTag --extend postgres
 mix ash.gen.resource Helpcenter.KnowledgeBase.ArticleFeedback --extend postgres
+
+**Create Migrations**
+mix ash_postgres.generate_migrations — name add_knowledge_base_tables
+mix ash_postgres.migrate
