@@ -58,18 +58,21 @@ end
 ## Database Access
 
 **Seeding**
+
+```
 attrs = [
 %{
-name: "Account and Login",
-slug: "account-login",
-description: "Help with account creation, login issues, and profile management"
+  name: "Account and Login",
+  slug: "account-login",
+  description: "Help with account creation, login issues, and profile management"
 },
 %{
-name: "Billing and Payments",
-slug: "billing-payments",
-description: "Assistance with invoices, subscription plans, and payment issues"
+  name: "Billing and Payments",
+  slug: "billing-payments",
+  description: "Assistance with invoices, subscription plans, and payment issues"
 }
 ]
+```
 
 Ash.Seed.seed!(Helpcenter.KnowledgeBase.Category, attrs)
 
@@ -118,17 +121,19 @@ category = Ash.read_first!(Helpcenter.KnowledgeBase.Category)
 
 # 2. Prepare new article data
 
+```
 article_attrs = %{
-title: "Getting Started with Zippiker",
-slug: "getting-started-zippiker",
-content: "Learn how to set up your Zippiker account and configure basic settings.",
-views_count: 1452,
-published: true
+  views_count: 1452,
+  title: "Getting Started with Zippiker",
+  slug: "getting-started-zippiker",
+  content: "Learn how to set up your Zippiker account and configure basic settings.",
+  published: true
 }
+```
 
 # Insert a Has Many Relationship via manage_relationship
 
-# 3 Create an article under his category
+# Create an article under his category
 
 _:create_article is a Category Action_
 
@@ -138,9 +143,10 @@ category
 
 **Find the article**
 
+require Ash.Query
 Helpcenter.KnowledgeBase.Article
 |> Ash.Query.filter(title == "Getting Started with Zippiker")
-|> Ash.read()
+|> Ash.read!()
 
 _for finding a substring, you can use the contains() expression_
 
@@ -148,3 +154,48 @@ require Ash.Query
 Helpcenter.KnowledgeBase.Article
 |> Ash.Query.filter(contains(title, "etting Started with Zippiker"))
 |> Ash.read()
+
+# Create Parent and The Child the Same Time
+
+# Create a Category with it's Article
+
+_Category Action_
+
+```
+create :create_with_article do
+  description "Create a Category and an article under it"
+  argument :article_attrs, :map, allow_nil?: false
+  change manage_relationship(:article_attrs, :articles, type: :create)
+end
+```
+
+# Define category and related article attributes
+
+```
+attributes = %{
+  name: "Features",
+  slug: "features",
+  description: "Category for features",
+  article_attrs: %{
+    title: "Compliance Features in Zippiker",
+    slug: "compliance-features-zippiker",
+    content: "Overview of compliance management features built into Zippiker."
+  }
+}
+```
+
+# Create category and its article at the same time
+
+Helpcenter.KnowledgeBase.Category
+|> Ash.Changeset.for_create(:create_with_article, attributes)
+|> Ash.create()
+
+# Retrieve Relationships with Ash.Query.load/1
+
+category_with_articles =
+(Helpcenter.KnowledgeBase.Category
+|> Ash.Query.filter(name == "Features")
+|> Ash.Query.load(:articles)
+|> Ash.read_first!())
+
+_Then access category articles like: category_with_articles.articles_
