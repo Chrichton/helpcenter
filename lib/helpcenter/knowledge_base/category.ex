@@ -9,10 +9,10 @@ defmodule Helpcenter.KnowledgeBase.Category do
     repo Helpcenter.Repo
 
     # # Delete related articles when a category is destroyed to prevent
-    # # leave records behind
-    # references do
-    #   reference :articles, on_delete: :delete
-    # end
+    # leave records behind
+    references do
+      reference :articles, on_delete: :delete
+    end
   end
 
   actions do
@@ -20,6 +20,16 @@ defmodule Helpcenter.KnowledgeBase.Category do
     default_accept [:name, :slug, :description]
     # Tell Ash what actions are allowed on this resource
     defaults [:create, :read, :update, :destroy]
+
+    update :create_article do
+      description "Create an article under a specified category"
+      # Set atomic to false since this is a 2-steps operation.
+      require_atomic? false
+      # Specify the parameter that will hold article attributes
+      # he article_attrs map must have the same fields as the fields required to create an article
+      argument :article_attrs, :map, allow_nil?: false
+      change manage_relationship(:article_attrs, :articles, type: :create)
+    end
   end
 
   # Tell Ash what columns the resource has and their types and validations

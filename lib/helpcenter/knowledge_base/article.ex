@@ -40,5 +40,10 @@ defmodule Helpcenter.KnowledgeBase.Article do
     has_many :article_feedbacks, Helpcenter.KnowledgeBase.ArticleFeedback do
       destination_attribute :article_id
     end
+
+    actions do
+      default_accept [:title, :slug, :content, :views_count, :published]
+      defaults [:create, :read, :update, :destroy]
+    end
   end
 end

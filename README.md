@@ -109,3 +109,42 @@ Helpcenter.KnowledgeBase.Category
 |> Ash.Query.filter(name == "Approvals and Workflows")
 |> Ash.read_first!()
 |> Ash.destroy()
+
+**Creating an Article under a Category**
+
+# 1. Get category to create an article under. Assume it exists already
+
+category = Ash.read_first!(Helpcenter.KnowledgeBase.Category)
+
+# 2. Prepare new article data
+
+article_attrs = %{
+title: "Getting Started with Zippiker",
+slug: "getting-started-zippiker",
+content: "Learn how to set up your Zippiker account and configure basic settings.",
+views_count: 1452,
+published: true
+}
+
+# Insert a Has Many Relationship via manage_relationship
+
+# 3 Create an article under his category
+
+_:create_article is a Category Action_
+
+category
+|> Ash.Changeset.for_update(:create_article, %{article_attrs: article_attrs})
+|> Ash.update()
+
+**Find the article**
+
+Helpcenter.KnowledgeBase.Article
+|> Ash.Query.filter(title == "Getting Started with Zippiker")
+|> Ash.read()
+
+_for finding a substring, you can use the contains() expression_
+
+require Ash.Query
+Helpcenter.KnowledgeBase.Article
+|> Ash.Query.filter(contains(title, "etting Started with Zippiker"))
+|> Ash.read()
