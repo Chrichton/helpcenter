@@ -192,6 +192,8 @@ Helpcenter.KnowledgeBase.Category
 
 # Retrieve Relationships with Ash.Query.load/1
 
+require Ash.Query
+
 category_with_articles =
 (Helpcenter.KnowledgeBase.Category
 |> Ash.Query.filter(name == "Features")
@@ -199,3 +201,41 @@ category_with_articles =
 |> Ash.read_first!())
 
 _Then access category articles like: category_with_articles.articles_
+
+**Belongs To**
+
+- Add category_id attribute to artist list of accepts
+- **Attention**: you don't have to add category_id to the attributes of artist
+
+```
+attributes = %{
+  title: "Common Issues During Setup and How to Fix Them",
+  slug: "setup-common-issues",
+  content: "Troubleshooting guide for common challenges faced.",
+  category_id: category_with_articles.id # Assumes you've retrieved a category from DB
+}
+```
+
+Helpcenter.KnowledgeBase.Article
+|> Ash.Changeset.for_create(:create, attributes)
+|> Ash.create()
+
+# Create Child and Parent at the Same Time
+
+```
+attributes = %{
+ title: "Common Issues During Setup and How to Fix Them",
+ slug: "setup-common-issues",
+ content: "Troubleshooting guide for common challenges faced.",
+ category_attrs: %{
+   name: "Troubleshooting",
+   slug: "troubleshooting",
+   description: "Diagnose and fix identified issues"
+ }
+}
+
+
+Helpcenter.KnowledgeBase.Article
+|> Ash.Changeset.for_create(:create_with_category, attributes)
+|> Ash.create()
+```
