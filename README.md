@@ -239,3 +239,25 @@ Helpcenter.KnowledgeBase.Article
 |> Ash.Changeset.for_create(:create_with_category, attributes)
 |> Ash.create()
 ```
+
+# Part 4 — Ash Framework for Phoenix Developers — Relationshps 2/2
+
+# Many To Many Relationship Through Another Resource
+
+category = (Helpcenter.KnowledgeBase.Category
+|> Ash.Query.filter(name == "General Support")
+|> Ash.read_first!())
+
+```
+attributes = %{
+  title: "Common Issues During Setup and How to Fix Them",
+  slug: "setup-common-issues",
+  content: "Troubleshooting guide for common challenges faced.",
+  category_id: category.id,
+  tags: [%{name: "issues"}, %{name: "solution"}]
+}
+```
+
+article = (Helpcenter.KnowledgeBase.Article
+|> Ash.Changeset.for_create(:create_with_tags, attributes)
+|> Ash.create!())

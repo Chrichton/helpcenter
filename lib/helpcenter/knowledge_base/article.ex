@@ -50,6 +50,17 @@ defmodule Helpcenter.KnowledgeBase.Article do
         argument :category_attrs, :map, allow_nil?: false
         change manage_relationship(:category_attrs, :category, type: :create)
       end
+
+      create :create_with_tags do
+        description "Create an article with tags"
+        argument :tags, {:array, :map}, allow_nil?: false
+
+        change manage_relationship(:tags, :tags,
+                 on_no_match: :create,
+                 on_match: :ignore,
+                 on_missing: :create
+               )
+      end
     end
   end
 end
