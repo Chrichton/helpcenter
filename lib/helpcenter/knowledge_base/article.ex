@@ -7,6 +7,16 @@ defmodule Helpcenter.KnowledgeBase.Article do
   postgres do
     table "articles"
     repo Helpcenter.Repo
+
+    # Delete this article if related category is deleted
+    references do
+      reference :category, on_delete: :delete
+    end
+
+    # 1. Nullify category_id column on article when related category is deleted
+    # references do
+    #   reference :category, on_delete: :nilify
+    # end
   end
 
   attributes do
@@ -24,6 +34,10 @@ defmodule Helpcenter.KnowledgeBase.Article do
     belongs_to :category, Helpcenter.KnowledgeBase.Category do
       source_attribute :category_id
       allow_nil? false
+
+      # for 1. Nullify category_id column on article when related category is deleted
+      # category_id can be null when there is no related category
+      # allow_nil? true
     end
 
     has_many :comments, Helpcenter.KnowledgeBase.Comment do

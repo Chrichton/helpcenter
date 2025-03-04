@@ -261,3 +261,86 @@ attributes = %{
 article = (Helpcenter.KnowledgeBase.Article
 |> Ash.Changeset.for_create(:create_with_tags, attributes)
 |> Ash.create!())
+
+# Has One
+
+[Has One Relationship](https://hexdocs.pm/ash/relationships.html#has-one)
+
+# Filtering With Relationship(A.K.A Where Conditions)
+
+```
+require Ash.Query
+
+Helpcenter.KnowledgeBase.Article
+|> Ash.Query.filter(tags.name == "issues")
+|> Ash.read!()
+```
+
+```
+require Ash.Query
+
+Helpcenter.KnowledgeBase.Category
+|> Ash.Query.filter(articles.tags.name == "issues")
+|> Ash.read!()
+```
+
+# Retrieving Nested Relationships
+
+```
+Helpcenter.KnowledgeBase.Category
+|> Ash.Query.filter(articles.tags.name == "issues")
+|> Ash.Query.load(articles: :tags)
+|> Ash.read!()
+```
+
+_Note how I wrote articles: :tags this special notation tells Ash that you will load articles and corresponding tags for each article_
+
+# Deleting Record With Related Records(Relationship) or Nullifying Related Records Instead of Deleting Them
+
+# On Data Layer (Postgres)
+
+_make changes to the Article resource_
+
+Deleting Record is implemented, Nullifying is inserted commented out
+
+mix ash_postgres.generate_migrations –name add_category_on_delete_to_article
+mix ash_postgres.migrate
+
+# Delete Related Record Without Relying on Data Layer
+
+The downside of this approach is that:
+It won’t necessarily handle atomic/ transactional deletion, to ensure us that on success, all related records are deleted or nothing gets deleted on failure.
+If delete references on the parent relationships are in the database, it might not propagate the deletion down childrens. For example: If we have a category with articles, and articles with comments. When a category is deleted, it should delete all its articles and comments related to the article. This is not guaranteed with this approach.
+
+1. Remove :destroy from defaults. Your default should look like:
+   defaults [:create, :read, :update]
+2. Then manually add destroy action.
+
+```
+destroy :destroy do
+  description "Destroy article and its comments"
+  # Make this action primary so that it can be called with Ash.destroy without
+  # having to mention the action to use
+  primary? true
+  require_atomic? false
+
+  # Before this action is executed, we'll need to delete corresponding
+  # comments
+  change before_action(fn changeset, context ->
+    # We need Ash.Query to filter
+    require Ash.Query
+
+    # Find all comments related to this article
+    %Ash.BulkResult{status: :success} =
+      Helpcenter.KnowledgeBase.Comment
+      |> Ash.Query.filter(article_id == ^changeset.data.id)
+      |> Ash.read!()
+      #  Bulk delete all comments related to this article
+      |> Ash.bulk_destroy(:destroy, _condition = %{}, batch_size: 100)
+
+
+      # Continue with the change
+      changeset
+    end)
+end
+```
