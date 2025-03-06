@@ -76,5 +76,10 @@ defmodule Helpcenter.KnowledgeBase.Article do
                )
       end
     end
+
+    aggregates do
+      count :comment_count, :comments
+      count :tag_count, :tags
+    end
   end
 end

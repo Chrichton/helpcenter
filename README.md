@@ -344,3 +344,5 @@ destroy :destroy do
     end)
 end
 ```
+
+# Part 5 — Ash Framework For Phoenix Developers — Show Data on Pages & Ash Aggregations

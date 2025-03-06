@@ -28,4 +28,8 @@ defmodule Helpcenter.KnowledgeBase.Tag do
       destination_attribute_on_join_resource :article_id
     end
   end
+
+  aggregates do
+    count :article_count, :articles
+  end
 end
