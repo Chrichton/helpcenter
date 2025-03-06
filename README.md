@@ -346,3 +346,5 @@ end
 ```
 
 # Part 5 — Ash Framework For Phoenix Developers — Show Data on Pages & Ash Aggregations
+
+# Part 6 — Ash Framework for Phoenix Developers —AshPhoenix & Liveview

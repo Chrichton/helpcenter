@@ -17,6 +17,12 @@ defmodule HelpcenterWeb.Router do
   scope "/", HelpcenterWeb do
     pipe_through :browser
 
+    scope "/categories" do
+      live "/", CategoriesLive
+      live "/create", CreateCategoryLive
+      live "/:category_id", EditCategoryLive
+    end
+
     get "/", PageController, :home
   end
 
