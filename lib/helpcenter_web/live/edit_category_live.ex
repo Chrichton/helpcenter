@@ -16,7 +16,7 @@ defmodule HelpcenterWeb.EditCategoryLive do
       phx-submit="save"
       phx-change="validate"
     >
-      <h1>{gettext("New Category")}</h1>
+      <h1>{gettext("Edit Category")}</h1>
       <.input field={@form[:name]} label={gettext("Name")} />
       <.input field={@form[:description]} label={gettext("Desription")} type="textarea" />
 
@@ -57,13 +57,13 @@ defmodule HelpcenterWeb.EditCategoryLive do
     case Form.submit(socket.assigns.form, params: params) do
       {:ok, category} ->
         socket
-        |> put_flash(:info, "Category '#{category.name}' created!")
+        |> put_flash(:info, "Category '#{category.name}' updated!")
         |> noreply()
 
       {:error, form} ->
         socket
         |> assign(:form, form)
-        |> put_flash(:error, "Unable to create category")
+        |> put_flash(:error, "Unable to update category")
         |> noreply()
     end
   end

@@ -2,7 +2,9 @@ defmodule Helpcenter.KnowledgeBase.Category do
   use Ash.Resource,
     otp_app: :helpcenter,
     domain: Helpcenter.KnowledgeBase,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    # Tell Ash to broadcast/ Emit events via pubsub
+    notifiers: Ash.Notifier.PubSub
 
   postgres do
     table "categories"
@@ -36,6 +38,27 @@ defmodule Helpcenter.KnowledgeBase.Category do
       argument :article_attrs, :map, allow_nil?: false
       change manage_relationship(:article_attrs, :articles, type: :create)
     end
+  end
+
+  # Configure how ash will work with pubsub on this resource.
+  pub_sub do
+    # 1. Tell Ash to use HelpcenterWeb.Endpoint for publishing events
+    module HelpcenterWeb.Endpoint
+
+    # Prefix all events from this resource with category. This allows us
+    # to subscribe only to events starting with "categories" in livew view
+    prefix "categories"
+
+    # Define event topic or names. Below configuration will be publishing
+    # topic of this format whenever an action of update, create or delete
+    # happens:
+    #    "categories"
+    #    "categories:UUID-PRIMARY-KEY-ID-OF-CATEGORY"
+    #
+    #  You can pass any other parameter available on resource like slug
+    publish_all :update, [[:id, nil]]
+    publish_all :create, [[:id, nil]]
+    publish_all :destroy, [[:id, nil]]
   end
 
   # Tell Ash what columns the resource has and their types and validations

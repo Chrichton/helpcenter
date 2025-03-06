@@ -45,9 +45,27 @@ defmodule HelpcenterWeb.CategoriesLive do
   end
 
   def mount(_params, _session, socket) do
+    # if the user is connected then subscribe to all events/ topic
+    # with categories event
+    if connected?(socket) do
+      HelpcenterWeb.Endpoint.subscribe("categories")
+    end
+
     socket
     |> assign_categories()
     |> ok()
+  end
+
+  @doc """
+  Function that responds when an event with topic "categories" is detected.
+  It does two things
+  1. It pattern matches events with topic "categories" only
+  2. It refreshes categories from DB via assign_categories
+  """
+  def handle_info(%Phoenix.Socket.Broadcast{topic: "categories"}, socket) do
+    socket
+    |> assign_categories()
+    |> noreply()
   end
 
   # Responds when a user clicks on trash button

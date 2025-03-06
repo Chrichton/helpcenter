@@ -348,3 +348,71 @@ end
 # Part 5 — Ash Framework For Phoenix Developers — Show Data on Pages & Ash Aggregations
 
 # Part 6 — Ash Framework for Phoenix Developers —AshPhoenix & Liveview
+
+# Part 7 — Ash Framework for Phoenix Developers |Go Real-time with Ash.Notifications and PubSub
+
+config/config.exs:
+config :ash, :pub_sub, debug?: true
+
+```
+defmodule Helpcenter.KnowledgeBase.Category do
+ use Ash.Resource,
+   domain: Helpcenter.KnowledgeBase,
+   data_layer: AshPostgres.DataLayer,
+   # Tell Ash to broadcast/ Emit events via pubsub
+   notifiers: Ash.Notifier.PubSub
+
+   # The rest of the resource definition...
+end
+```
+
+```
+ # Configure how ash will work with pubsub on this resource.
+ pub_sub do
+   # 1. Tell Ash to use HelpcenterWeb.Endpoint for publishing events
+   module HelpcenterWeb.Endpoint
+
+
+   # Prefix all events from this resource with category. This allows us
+   # to subscribe only to events starting with "categories" in livew view
+   prefix "categories"
+
+   # Define event topic or names. Below configuration will be publishing
+   # topic of this format whenever an action of update, create or delete
+   # happens:
+   #    "categories"
+   #    "categories:UUID-PRIMARY-KEY-ID-OF-CATEGORY"
+   #
+   #  You can pass any other parameter available on resource like slug
+   publish_all :update, [[:id, nil]]
+   publish_all :create, [[:id, nil]]
+   publish_all :destroy, [[:id, nil]]
+ end
+```
+
+# Subscribing to Pubsub in Live View
+
+```
+def mount() do
+  # if the user is connected then subscribe to all events/ topic
+  # with categories event
+  if connected?(socket) do
+  HelpcenterWeb.Endpoint.subscribe("categories")
+
+  .......
+end
+```
+
+```
+@doc """
+Function that responds when an event with topic "categories" is detected.
+It does two things
+1. It pattern matches events with topic "categories" only
+2. It refreshes categories from DB via assign_categories
+"""
+def handle_info(%Phoenix.Socket.Broadcast{topic: "categories"}, socket) do
+  socket
+  |> assign_categories()
+  |> noreply()
+end
+```
