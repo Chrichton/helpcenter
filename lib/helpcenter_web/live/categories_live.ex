@@ -36,6 +36,7 @@ defmodule HelpcenterWeb.CategoriesLive do
           text-zinc-500
           hover:bg-white
           hover:text-zinc-900"
+          data-confirm="Delete this category? Are you sure?"
         >
           <.icon name="hero-trash-solid" />
         </.button>

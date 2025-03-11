@@ -416,3 +416,7 @@ def handle_info(%Phoenix.Socket.Broadcast{topic: "categories"}, socket) do
   |> noreply()
 end
 ```
+
+# Part 8 — Ash Framework for Phoenix Developers | How Not to Repeat Yourself (DRY) in Forms
+
+Use a Form-Component to centralize code for creating and updating categories
