@@ -420,3 +420,5 @@ end
 # Part 8 — Ash Framework for Phoenix Developers | How Not to Repeat Yourself (DRY) in Forms
 
 Use a Form-Component to centralize code for creating and updating categories
+
+[Phoenix LiveView v1.0.0's new curly brace syntax](https://arrowsmithlabs.com/blog/phoenix-liveview-v1.0.0-new-curly-brace-syntax)
