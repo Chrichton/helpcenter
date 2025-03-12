@@ -38,6 +38,12 @@ defmodule Helpcenter.KnowledgeBase.Category do
       argument :article_attrs, :map, allow_nil?: false
       change manage_relationship(:article_attrs, :articles, type: :create)
     end
+
+    read :most_recent do
+      prepare Helpcenter.Preparations.LimitTo5
+      prepare Helpcenter.Preparations.MonthToDate
+      prepare Helpcenter.Preparations.OrderByMostRecent
+    end
   end
 
   # Configure how ash will work with pubsub on this resource.

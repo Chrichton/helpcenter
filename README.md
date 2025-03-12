@@ -422,3 +422,69 @@ end
 Use a Form-Component to centralize code for creating and updating categories
 
 [Phoenix LiveView v1.0.0's new curly brace syntax](https://arrowsmithlabs.com/blog/phoenix-liveview-v1.0.0-new-curly-brace-syntax)
+
+# Part 9 — Ash Framework for Phoenix Developers | How Not to Repeat Yourself In Read-Queries
+
+## Preparations
+
+1. Filters or also known as where conditions
+2. Sorting also known as order by
+3. Grouping results
+4. Limiting results
+5. And more...
+
+### Local scope Preparations
+
+```
+read :most_recent do
+  # Preparate to limit results to 5 records
+  prepare build(limit: 5)
+
+  # Prepare to sort results by their inserted at date
+  prepare build(sort: [inserted_at: :desc])
+
+  # Another preparation to filter categories created this month only
+  filter expr(inserted_at >= ^Date.beginning_of_month(Date.utc_today()))
+end
+```
+
+Helpcenter.KnowledgeBase.Category
+|> Ash.read!(action: :most_recent)
+
+## Global scope Preparations
+
+The same way we’ve applied preparations inside an action, we can also apply a preparation to a **whole resource** in the **preparations block** on a resource.
+
+## Moving Preparation outside of Resource to Helpcenter.Preparations
+
+That way they can be applied to different resources
+
+opts = []
+context = Map.new()
+
+Helpcenter.KnowledgeBase.Category
+|> Helpcenter.Preparations.LimitTo5.prepare(opts, context)
+|> Helpcenter.Preparations.MonthToDate.prepare(opts, context)
+|> Helpcenter.Preparations.OrderByMostRecent.prepare(opts, context)
+|> Ash.read!()
+
+**Reuse the same preparation on Article**
+Helpcenter.KnowledgeBase.Article
+|> Helpcenter.Preparations.LimitTo5.prepare(opts, context)
+|> Helpcenter.Preparations.MonthToDate.prepare(opts, context)
+|> Helpcenter.Preparations.OrderByMostRecent.prepare(opts, context)
+|> Ash.read!()
+
+**Reuse the same preparation on Comment**
+Helpcenter.KnowledgeBase.Comment
+|> Helpcenter.Preparations.LimitTo5.prepare(opts, context)
+|> Helpcenter.Preparations.MonthToDate.prepare(opts, context)
+|> Helpcenter.Preparations.OrderByMostRecent.prepare(opts, context)
+|> Ash.read!()
+
+**Reuse the same preparation on Tags**
+Helpcenter.KnowledgeBase.Tag
+|> Helpcenter.Preparations.LimitTo5.prepare(opts, context)
+|> Helpcenter.Preparations.MonthToDate.prepare(opts, context)
+|> Helpcenter.Preparations.OrderByMostRecent.prepare(opts, context)
+|> Ash.read!()
