@@ -67,6 +67,10 @@ defmodule Helpcenter.KnowledgeBase.Category do
     publish_all :destroy, [[:id, nil]]
   end
 
+  changes do
+    change Helpcenter.Changes.Slugify
+  end
+
   # Tell Ash what columns the resource has and their types and validations
   attributes do
     uuid_primary_key :id

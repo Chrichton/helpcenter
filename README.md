@@ -488,3 +488,7 @@ Helpcenter.KnowledgeBase.Tag
 |> Helpcenter.Preparations.MonthToDate.prepare(opts, context)
 |> Helpcenter.Preparations.OrderByMostRecent.prepare(opts, context)
 |> Ash.read!()
+
+# Part 10— Ash Framework for Phoenix Developers | How Not to Repeat Yourself In Creating & Updating Queries
+
+In the Ash framework we use **changes** to define **create**-query logic and **update**-query logic. Changes are to create, and update what preparations are to read-query logic

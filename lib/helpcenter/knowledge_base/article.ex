@@ -19,6 +19,10 @@ defmodule Helpcenter.KnowledgeBase.Article do
     # end
   end
 
+  changes do
+    change Helpcenter.Changes.Slugify
+  end
+
   attributes do
     uuid_primary_key :id
     attribute :title, :string, allow_nil?: false
