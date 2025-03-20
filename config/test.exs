@@ -1,4 +1,5 @@
 import Config
+config :helpcenter, token_signing_secret: "yNtEn9rFzu97T9UJhB5uiXLt0gkR6UcU"
 config :ash, disable_async?: true
 
 # Configure your database

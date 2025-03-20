@@ -63,7 +63,7 @@ config :helpcenter, HelpcenterWeb.Endpoint,
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :helpcenter, dev_routes: true
+config :helpcenter, dev_routes: true, token_signing_secret: "4wkaBn0Dt5mQ/ExJchVC1Z9Pd8ol8RcH"
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

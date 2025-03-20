@@ -33,6 +33,9 @@ defmodule Helpcenter.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bcrypt_elixir, "~> 3.0"},
+      {:picosat_elixir, "~> 0.2"},
+      {:ash_authentication_phoenix, "~> 2.0"},
       {:sourceror, "~> 1.7", only: [:dev, :test]},
       {:ash_phoenix, "~> 2.0"},
       {:ash_postgres, "~> 2.0"},
@@ -85,7 +88,8 @@ defmodule Helpcenter.MixProject do
         "tailwind helpcenter --minify",
         "esbuild helpcenter --minify",
         "phx.digest"
-      ]
+      ],
+      "phx.routes": ["phx.routes", "ash_authentication.phoenix.routes"]
     ]
   end
 end

@@ -492,3 +492,14 @@ Helpcenter.KnowledgeBase.Tag
 # Part 10— Ash Framework for Phoenix Developers | How Not to Repeat Yourself In Creating & Updating Queries
 
 In the Ash framework we use **changes** to define **create**-query logic and **update**-query logic. Changes are to create, and update what preparations are to read-query logic
+
+# Part 11 — Ash Framework for Phoenix Developers | Secure Your App With AshAuthentication
+
+1. mix archive.install hex igniter_new
+2. mix igniter.install ash_authentication_phoenix --auth-strategy magic_link,password
+3. mix ash_postgres.migrate
+4. Start the server and visit https://localhost:4000/register to see the registration page
+5. To display a “Sign In” or “Sign Out” button based on login status, add this code under the Zippiker logo in home.html.heex
+6. To secure the category LiveView routes, move them into ash_authentication_live_session and require authentication
+7. Now, visiting http://localhost:4000/categories will redirect unauthenticated users to sign in
+8. Authenticated users can view and manage categories
