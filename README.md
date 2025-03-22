@@ -503,3 +503,20 @@ In the Ash framework we use **changes** to define **create**-query logic and **u
 6. To secure the category LiveView routes, move them into ash_authentication_live_session and require authentication
 7. Now, visiting http://localhost:4000/categories will redirect unauthenticated users to sign in
 8. Authenticated users can view and manage categories
+
+# Part 12: Ash Framework for Phoenix Developers | Writing Tests to Verify Your Code Works
+
+1. Configure Ash Framework for Testing
+
+# config/test.exs
+
+config :ash, :disable_async?, true
+config :ash, :missed_notifications, :ignore
+
+2. Installing mix_test_watch to Simplify Test Workflow
+
+mix igniter.install mix_test_watch
+
+3. Write Tests and start with
+
+mix test.watch test/helpcenter_web/live/knowledge_base/categories_live_test.exs
