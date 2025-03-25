@@ -276,6 +276,18 @@ defmodule Helpcenter.Accounts.User do
     attribute :hashed_password, :string do
       sensitive? true
     end
+
+    attribute :current_team, :string do
+      description "The current team the user is accessing the app with"
+    end
+  end
+
+  relationships do
+    many_to_many :teams, Helpcenter.Accounts.Team do
+      through Helpcenter.Accounts.UserTeam
+      source_attribute_on_join_resource :user_id
+      destination_attribute_on_join_resource :team_id
+    end
   end
 
   identities do

@@ -71,6 +71,11 @@ defmodule Helpcenter.KnowledgeBase.Category do
     change Helpcenter.Changes.Slugify
   end
 
+  # Make this resource multi-tenant
+  multitenancy do
+    strategy :context
+  end
+
   # Tell Ash what columns the resource has and their types and validations
   attributes do
     uuid_primary_key :id

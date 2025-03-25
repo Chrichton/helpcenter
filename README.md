@@ -520,3 +520,14 @@ mix igniter.install mix_test_watch
 3. Write Tests and start with
 
 mix test.watch test/helpcenter_web/live/knowledge_base/categories_live_test.exs
+
+# Part 13 — Ash Framework for Phoenix Developers | Multitenancy - SAAS
+
+# 13.1 Setting Up Teams (Tenant) Resource
+
+# 13.2 Creating a Team and Auto-Linking the Owner User to the Team
+
+1. Start with a test: test/helpcenter/accounts/team_test.exs
+2. Add a bidirectional relationships between user and team (**many_to_many**)
+
+To create a category you now have to **specify a tenant**

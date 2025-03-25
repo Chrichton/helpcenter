@@ -9,6 +9,11 @@ defmodule Helpcenter.KnowledgeBase.Comment do
     repo Helpcenter.Repo
   end
 
+  # Make this resource multi-tenant
+  multitenancy do
+    strategy :context
+  end
+
   attributes do
     uuid_primary_key :id
     attribute :content, :string, allow_nil?: false
