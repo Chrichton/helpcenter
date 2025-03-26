@@ -4,7 +4,12 @@ defmodule HelpcenterWeb.PageController do
 
   def home(conn, _params) do
     # Retrieve categories with the articles
-    categories = Ash.read!(Category, load: :article_count)
+    categories =
+      if team = Ash.read_first!(Helpcenter.Accounts.Team) do
+        Ash.read!(Category, load: :article_count, tenant: team.domain)
+      else
+        []
+      end
 
     # The home page is often custom made,
     # so skip the default app layout.

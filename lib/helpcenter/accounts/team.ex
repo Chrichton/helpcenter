@@ -29,8 +29,15 @@ defmodule Helpcenter.Accounts.Team do
   end
 
   actions do
-    default_accept [:name, :domain, :description]
-    defaults [:create, :read]
+    default_accept [:name, :domain, :description, :owner_user_id]
+    defaults [:read]
+
+    create :create do
+      # Default create action
+      primary? true
+      change Helpcenter.Accounts.Team.Changes.AssociateUserToTeam
+      change Helpcenter.Accounts.Team.Changes.SetOwnerCurrentTeam
+    end
   end
 
   attributes do

@@ -4,7 +4,9 @@ defmodule Helpcenter.Accounts.User do
     domain: Helpcenter.Accounts,
     authorizers: [Ash.Policy.Authorizer],
     extensions: [AshAuthentication],
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    # Register notifications to call after actions are successfully done.
+    notifiers: [Helpcenter.Accounts.User.Notifiers.CreatePersonalTeamNotification]
 
   authentication do
     add_ons do
@@ -252,6 +254,12 @@ defmodule Helpcenter.Accounts.User do
 
       # Generates an authentication token for the user
       change AshAuthentication.GenerateTokenChange
+    end
+
+    update :set_current_team do
+      description "Sets the user's current team."
+      argument :team, :string, allow_nil?: false, sensitive?: false
+      change set_attribute(:current_team, arg(:team))
     end
   end
 

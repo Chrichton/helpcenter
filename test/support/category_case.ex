@@ -1,32 +1,21 @@
 defmodule HelpcenterWeb.CategoryCase do
   alias Helpcenter.KnowledgeBase.Category
 
-  @doc """
-  Get a single category from the database. If none exists,
-  insert categories and return the first one.
-  """
-  def get_category do
-    case Ash.read_first(Category) do
-      {:ok, nil} -> create_categories() |> Enum.at(0)
+  def get_category(tenant) do
+    case Ash.read_first(Category, tenant: tenant) do
+      {:ok, nil} -> create_categories(tenant) |> Enum.at(0)
       {:ok, category} -> category
     end
   end
 
-  @doc """
-  Get a list of categories. If none exist in the database,
-  insert them and return the list.
-  """
-  def get_categories do
+  def get_categories(tenant) do
     case Ash.read(Category) do
-      {:ok, []} -> create_categories()
+      {:ok, []} -> create_categories(tenant)
       {:ok, categories} -> categories
     end
   end
 
-  @doc """
-  Insert categories into the database.
-  """
-  def create_categories do
+  def create_categories(tenant) do
     attrs = [
       %{
         name: "Account and Login",
@@ -80,6 +69,7 @@ defmodule HelpcenterWeb.CategoryCase do
       }
     ]
 
-    Ash.Seed.seed!(Category, attrs)
+    # We use this function to seed data into the database
+    Ash.Seed.seed!(Category, attrs, tenant: tenant)
   end
 end

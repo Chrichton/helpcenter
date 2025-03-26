@@ -531,3 +531,9 @@ mix test.watch test/helpcenter_web/live/knowledge_base/categories_live_test.exs
 2. Add a bidirectional relationships between user and team (**many_to_many**)
 
 To create a category you now have to **specify a tenant**
+
+# Part 14: Ash Framework for Phoenix Developers | Multitenancy: Automating User-Team Associations
+
+1. Automatically link a team to its owner when the team is created.
+2. Set the current_team field for the owner automatically.
+3. Create a personal team for every new user upon registration.
