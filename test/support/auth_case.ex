@@ -13,7 +13,7 @@ defmodule HelpcenterWeb.AuthCase do
     end
   end
 
-  def create_user do
+  def create_user() do
     # Create a user and the person team automatically.
     # The person team will be the tenant for the query
     count = System.unique_integer([:monotonic, :positive])

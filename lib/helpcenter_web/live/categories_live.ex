@@ -11,10 +11,12 @@ defmodule HelpcenterWeb.CategoriesLive do
     <%!-- List category records --%>
     <h1>{gettext("Categories")}</h1>
 
-    <.table id="knowledge-base-categories" rows={@categories}>
-      <:col :let={row} label={gettext("Name")}>{row.name}</:col>
-      <:col :let={row} label={gettext("Description")}>{row.description}</:col>
-      <:action :let={row}>
+    <.table id="knowledge-base-categories" rows={@streams.categories}>
+      <:col :let={{_id, row}} label={gettext("Name")}>{row.name}</:col>
+      <:col :let={{_id, row}} label={gettext("Description")}>{row.description}</:col>
+      <:col :let={{_id, row}} label={gettext("Articles")}>{row.article_count}</:col>
+
+      <:action :let={{_id, row}}>
         <%!-- Edit Category button --%>
         <.button
           id={"edit-button-#{row.id}"}
@@ -57,21 +59,11 @@ defmodule HelpcenterWeb.CategoriesLive do
     |> ok()
   end
 
-  @doc """
-  Function that responds when an event with topic "categories" is detected.
-  It does two things
-  1. It pattern matches events with topic "categories" only
-  2. It refreshes categories from DB via assign_categories
-  """
-  def handle_info(%Phoenix.Socket.Broadcast{topic: "categories"}, socket) do
-    socket
-    |> assign_categories()
-    |> noreply()
-  end
-
   # Responds when a user clicks on trash button
   def handle_event("delete-" <> category_id, _params, socket) do
-    case destroy_record(category_id) do
+    actor = socket.assigns.current_user
+
+    case destroy_record(category_id, actor) do
       :ok ->
         socket
         |> put_flash(:info, "Category deleted successfully")
@@ -84,17 +76,32 @@ defmodule HelpcenterWeb.CategoriesLive do
     end
   end
 
-  defp assign_categories(socket) do
-    {:ok, categories} =
-      Helpcenter.KnowledgeBase.Category
-      |> Ash.read()
-
-    assign(socket, :categories, categories)
+  @moduledoc """
+  Function that responds when an event with topic "categories" is detected.
+  It does two things
+  1. It pattern matches events with topic "categories" only
+  2. It refreshes categories from DB via assign_categories
+  """
+  def handle_info(%Phoenix.Socket.Broadcast{topic: "categories"}, socket) do
+    socket
+    |> assign_categories()
+    |> noreply()
   end
 
-  defp destroy_record(category_id) do
+  defp assign_categories(socket) do
+    actor = socket.assigns.current_user
+    stream(socket, :categories, get_articles(actor))
+  end
+
+  defp get_articles(actor) do
     Helpcenter.KnowledgeBase.Category
-    |> Ash.get!(category_id)
-    |> Ash.destroy()
+    |> Ash.Query.load(:article_count)
+    |> Ash.read!(actor: actor)
+  end
+
+  defp destroy_record(category_id, actor) do
+    Helpcenter.KnowledgeBase.Category
+    |> Ash.get!(category_id, actor: actor)
+    |> Ash.destroy(actor: actor)
   end
 end

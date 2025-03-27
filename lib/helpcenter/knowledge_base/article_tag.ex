@@ -14,6 +14,15 @@ defmodule Helpcenter.KnowledgeBase.ArticleTag do
     defaults [:create, :read, :update, :destroy]
   end
 
+  preparations do
+    prepare Helpcenter.Preparations.SetTenant
+  end
+
+  changes do
+    # Auto-set tenant based on the user/actor
+    change Helpcenter.Changes.SetTenant
+  end
+
   # Make this resource multi-tenant
   multitenancy do
     strategy :context

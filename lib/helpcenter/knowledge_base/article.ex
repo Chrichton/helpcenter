@@ -19,8 +19,14 @@ defmodule Helpcenter.KnowledgeBase.Article do
     # end
   end
 
+  preparations do
+    prepare Helpcenter.Preparations.SetTenant
+  end
+
   changes do
     change Helpcenter.Changes.Slugify
+    # Auto-set tenant based on the user/actor
+    change Helpcenter.Changes.SetTenant
   end
 
   # Make this resource multi-tenant
@@ -66,7 +72,7 @@ defmodule Helpcenter.KnowledgeBase.Article do
 
     actions do
       default_accept [:title, :slug, :content, :views_count, :published, :category_id]
-      defaults [:create, :read, :update, :destroy]
+      defaults [:create, :read, :update]
 
       create :create_with_category do
         description "Create an article and its category at the same time"
@@ -83,6 +89,12 @@ defmodule Helpcenter.KnowledgeBase.Article do
                  on_match: :ignore,
                  on_missing: :create
                )
+      end
+
+      destroy :destroy do
+        description "Destroy article and its comments"
+        primary? true
+        change Helpcenter.KnowledgeBase.Article.Changes.DeleteRelatedComment
       end
     end
 

@@ -40,3 +40,6 @@ config :phoenix_live_view,
 
 config :ash, :disable_async?, true
 config :ash, :missed_notifications, :ignore
+
+# Do NOT use in production!
+config :bcrypt_elixir, log_rounds: 1

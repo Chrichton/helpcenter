@@ -9,6 +9,15 @@ defmodule Helpcenter.KnowledgeBase.Comment do
     repo Helpcenter.Repo
   end
 
+  preparations do
+    prepare Helpcenter.Preparations.SetTenant
+  end
+
+  changes do
+    # Auto-set tenant based on the user/actor
+    change Helpcenter.Changes.SetTenant
+  end
+
   # Make this resource multi-tenant
   multitenancy do
     strategy :context

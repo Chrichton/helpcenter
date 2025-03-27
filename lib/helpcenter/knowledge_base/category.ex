@@ -67,8 +67,14 @@ defmodule Helpcenter.KnowledgeBase.Category do
     publish_all :destroy, [[:id, nil]]
   end
 
+  preparations do
+    prepare Helpcenter.Preparations.SetTenant
+  end
+
   changes do
     change Helpcenter.Changes.Slugify
+    # Auto-set tenant based on the user/actor
+    change Helpcenter.Changes.SetTenant
   end
 
   # Make this resource multi-tenant

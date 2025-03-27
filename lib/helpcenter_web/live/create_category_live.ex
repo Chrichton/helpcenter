@@ -11,7 +11,7 @@ defmodule HelpcenterWeb.CreateCategoryLive do
     <.back navigate={~p"/categories"}>{gettext("Back to categories")}</.back>
 
     <%!-- Typical simple form from core_components --%>
-    <HelpcenterWeb.Categories.CategoryForm.form />
+    <HelpcenterWeb.Categories.CategoryForm.form actor={@current_user} />
     """
   end
 end

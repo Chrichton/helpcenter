@@ -4,6 +4,7 @@ defmodule HelpcenterWeb.PageController do
 
   def home(conn, _params) do
     # Retrieve categories with the articles
+    # TODO: Configure default tenant. For now, we are picking the first available tenant
     categories =
       if team = Ash.read_first!(Helpcenter.Accounts.Team) do
         Ash.read!(Category, load: :article_count, tenant: team.domain)

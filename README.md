@@ -537,3 +537,34 @@ To create a category you now have to **specify a tenant**
 1. Automatically link a team to its owner when the team is created.
 2. Set the current_team field for the owner automatically.
 3. Create a personal team for every new user upon registration.
+
+# Part 15: Ash Framework for Phoenix Developers | Multitenancy: Auto-Setting Tenants Based On Logged In User
+
+We’ll handle tenant-setting in a centralized way. For create, update, and destroy actions, we’ll tuck the logic into a change. For read queries, we’ll stash it in a preparation.
+
+From this:
+
+```
+Helpcenter.KnowledgeBase.Category
+|> Ash.Changeset.for_create(
+  :create,
+  attrs,
+  tenant: team.domain  # <-- Manually specify the tenant for data separation
+)
+|> Ash.create()
+```
+
+To this:
+
+```
+Helpcenter.KnowledgeBase.Category
+|> Ash.Changeset.for_create(
+  :create,
+  attrs,
+  actor: user  # <-- Pass the user, tenant auto-sets
+) |> Ash.create()
+```
+
+- Make CategoryForm, EditCategoryLive, CreateCategoryLive, and CategoriesLive tenant-aware.
+- Patch the homepage with a temporary default tenant.
+- Add a tenant-aware DeleteRelatedComment change for articles.
