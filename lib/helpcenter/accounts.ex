@@ -7,5 +7,7 @@ defmodule Helpcenter.Accounts do
     resource Helpcenter.Accounts.User
     resource Helpcenter.Accounts.Team
     resource Helpcenter.Accounts.UserTeam
+    resource Helpcenter.Accounts.Permission
+    resource Helpcenter.Accounts.Group
   end
 end

@@ -568,3 +568,19 @@ Helpcenter.KnowledgeBase.Category
 - Make CategoryForm, EditCategoryLive, CreateCategoryLive, and CategoriesLive tenant-aware.
 - Patch the homepage with a temporary default tenant.
 - Add a tenant-aware DeleteRelatedComment change for articles.
+
+# Part 16 — Understanding Authorization in Ash Framework
+
+**What We’re Building**
+To make this work, we need four main resources in our Accounts domain:
+
+1. Permission: A list of actions users can do (e.g., “read” or “create”).
+2. Group: A role or team (e.g., “Accountants”) that exists within a specific company or “tenant.”
+3. GroupPermission: Links a group to specific permissions (e.g., “Accountants can read”).
+4. UserGroup: Connects users to groups (e.g., “Jane is an Accountant”).
+
+- Create these four resources and connect them.
+- Add a check to see if a user is allowed to do something.
+- Set rules (policies) for who can access what.
+
+[Helpcenter Repo](https://github.com/kamaroly/helpcenter/tree/main)

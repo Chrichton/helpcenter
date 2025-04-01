@@ -9,7 +9,7 @@ defmodule Helpcenter.Accounts.TeamTest do
       user = create_user()
       # Define team attributes
       team_attrs = %{name: "Team 1", domain: "team_1", owner_user_id: user.id}
-      {:ok, team} = Ash.create(Helpcenter.Accounts.Team, team_attrs)
+      {:ok, team} = Ash.create!(Helpcenter.Accounts.Team, team_attrs)
 
       # Verify the team was stored successfully
       assert Helpcenter.Accounts.Team
